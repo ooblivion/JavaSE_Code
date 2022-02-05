@@ -29,5 +29,5 @@ public class InsertSort {
         return c1.compareTo(c2) > 0;//c1>c2返回true
     }
 }
-
+//add new thing
 
