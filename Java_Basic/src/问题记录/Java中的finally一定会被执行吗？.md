@@ -1,12 +1,4 @@
-# [Java 中的 finally 一定会被执行吗？](https://segmentfault.com/a/1190000023598948)
-
-**一、前言**
-
-------
-
-因为这次面试有问到一些同学finally的问题，发现自己这块好像有点记不太清楚了，有的点可能还给人家说错了，一度弄得场面有些尴尬。所以说这篇文章深入研究一下finally的执行情况和返回值的情况。
-
-## **二、finally一定会执行吗？**
+## **finally一定会执行吗？**
 
 先给答案：肯定不是。
 
@@ -85,7 +77,7 @@ public class TryCatchTest {
 
 我们在执行try块之中退出jvm，就没事了，都不执行了。当然这个情况是比较极端的，记住就行，没事不要乱整这个。最后总结一下：**不管是给try块中造了个异常，还是在try块中进行return，我们发现finally块还是会执行的。因为异常处理设计初衷就是让finally块始终执行**。这个总结在finally的执行时机得到证明。
 
-## **三、finally执行时机探讨**
+## **finally执行时机探讨**
 
 首先看常规情况：
 
@@ -145,7 +137,7 @@ public class TryCatchTest {
 
 同样的，**finally执行在catch块return的执行前**。
 
-## **四、finally块中的返回值**
+## **finally块中的返回值**
 
 ##### 1.finally块不含返回值，但是做改变变量值的操作
 
