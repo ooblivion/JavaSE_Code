@@ -7,4 +7,6 @@ package heima_DesignPattern.设计模式概述.依赖倒转原则.V2;
  * @author: Orange
  **/
 public interface HardDisk {
+    public void save(String data);
+    public String get();
 }

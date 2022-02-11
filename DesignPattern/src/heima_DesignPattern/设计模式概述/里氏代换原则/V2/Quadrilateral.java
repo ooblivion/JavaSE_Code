@@ -7,4 +7,8 @@ package heima_DesignPattern.设计模式概述.里氏代换原则.V2;
  * @author: Orange
  **/
 public interface Quadrilateral {
+    //获取长
+    double getLength();
+    //获取宽
+    double getWidth();
 }

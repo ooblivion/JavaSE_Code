@@ -37,6 +37,10 @@ public class Computer {
     }
 
     public void run() {
-        System.out.println("计算机工作");
+        System.out.println("运行计算机");
+        String data = hardDisk.get();
+        System.out.println("从硬盘上获取的数据是：" + data);
+        cpu.run();
+        memory.save();
     }
 }
