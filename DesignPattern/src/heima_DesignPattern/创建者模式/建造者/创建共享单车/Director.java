@@ -3,7 +3,7 @@ package heima_DesignPattern.创建者模式.建造者.创建共享单车;
 /**
  * @version v1.0
  * @ClassName: Director
- * @Description: TODO 类描述
+ * @Description: 指挥者类
  * @Author: Orange
  **/
 public class Director {
