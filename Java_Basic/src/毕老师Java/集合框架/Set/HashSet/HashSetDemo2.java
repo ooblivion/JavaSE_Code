@@ -6,7 +6,7 @@ import java.util.Iterator;
 /**
  * @version v1.0
  * @ClassName: HashSetDemo2
- * @Description: TODO 类描述
+ * @Description: 存储数据无序
  * @Author: Orange
  **/
 public class HashSetDemo2 {
@@ -19,6 +19,7 @@ public class HashSetDemo2 {
 
         //set集合取出只有一种方式：迭代器
         for(Iterator it = hs.iterator(); it.hasNext();)
-            System.out.println(it.next());//并不是按照传顺序打印的，而是按照地址值
+            //并不是按照传顺序打印的，而是按照地址值
+            System.out.println(it.next());
     }
 }

@@ -2,7 +2,7 @@ package 毕老师Java.面向对象.抽象类.模板方法模式.V2;
 
 /**
  * @version v1.0
- * @ClassName: Client
+ * @ClassName: ClientV1
  * @Description: TODO 类描述
  * @Author: Orange
  **/

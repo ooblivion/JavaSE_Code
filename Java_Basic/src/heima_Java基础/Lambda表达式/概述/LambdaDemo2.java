@@ -8,7 +8,6 @@ package heima_Java基础.Lambda表达式.概述;
  **/
 public class LambdaDemo2 {
     //Lambda只能简化接口中只有一个抽象方法的匿名内部类形式
-    //
     public static void main(String[] args) {
         Swimming s1 = new Swimming() {
             @Override
