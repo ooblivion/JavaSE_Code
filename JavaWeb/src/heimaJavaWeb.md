@@ -68,18 +68,12 @@
     DESC tb_user;
     ```
 
-    s
-
-    s
-
-    s
-
-    s
-
 - 查询Retrieve
   - `show tables`
   - `use 数据库名`
-  - `show tables`
+  - 
+  - 
+  - `    show tables`
   - 查询表结构 `desc 表名称`
 - 修改Update
 - 删除Delete
@@ -92,6 +86,37 @@
 
 ## JDBC
 
+---
+
+## 数据库内部
+
+### 约束
+
+- 约束概念
+  - 作用于表中列上的规则，用于限制加入表的数据。
+  - 约束的存在保证了数据库中数据的正确性，有效性和完整性
+- 约束分类（MySQL不支持检查约束
+  - 非空约束：NOT NULL
+  - 唯一约束：UNIQUE
+  - 主键约束：PRIMARY KEY
+  - 检查约束：CHECK
+  - 默认约束：DEFAULT
+  - 外键约束：FOREIGN KEY
+
+### 数据库设计
+
+业务系统中有什么数，数据用什么保存，表与表之间的关系
+
+### 多表查询
+
+### 事物
+
+
+
+
+
+
+
 ## Maven
 
 ## MyBatis
@@ -99,6 +124,76 @@
 # 前端
 
 ## HTML+CSS
+
+- HTML框架
+
+  ```html
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <title>Title</title>
+  </head>
+  <body>    
+  <!-- code -->
+      
+  <!-- 
+  code
+  -->
+  </body>
+  </html>
+  ```
+
+- HTML基础标签
+
+  ```html
+  <h1></h1>
+  <font face = "楷体" size = "5" color = "#ffc0cb"></font>
+  <b></b>
+  <i></i>
+  <u></u>
+  <center></center>
+  <p>
+     this is a paragraph 
+  </p>
+  <br>
+  <hr>
+  ```
+
+- 特殊转义字符
+
+  ```html
+  &lt; <!-- < -->
+  &gt; <!-- > -->
+  &amp; <!-- & -->
+  &quto; <!-- " -->
+  &reg; <!-- r -->
+  &copy; <!-- c -->
+  &trade; <!-- tm -->
+  &nbsp; <!-- space -->
+  ```
+
+- 图片，音频，视频（注意相对路径
+
+  ```html
+  <img src="url" width="xxx" height="xxx"> <!-- src heigh width 默认单位px or %-->
+  <audio src="url" controls="controls"></audio> <!-- src controls MP3/WAV/OGG -->
+  <video src="url" controls width="500" height="300"></video> <!-- src controls MP4/WebM/OGG-->
+  ```
+
+- 超链接
+
+  ```html
+  
+  ```
+
+- 列表标签
+
+- 表格标签
+
+- 布局标签
+
+- 表单标签
 
 ## JavaSript
 
