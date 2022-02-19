@@ -56,6 +56,24 @@
 
 #### +符号作连接符
 
+```java
+public class Demo {
+    public static void main(String[] args) {
+        int a = 5;
+        System.out.println("abc" + 'a');//abca
+        System.out.println("abc" + a);//abc5
+        System.out.println(5 + a);//10
+        System.out.println("abc" + 5 + 'a');//abc5a
+        System.out.println(15 + "abc" + 15);//15abc15
+        System.out.println(a+'a');//102
+        System.out.println(a+""+'a');//5a
+        System.out.println(a+'a'+"java");//102java
+        System.out.println("java"+a+'a');//java5a
+        System.out.println("java"+(a+'a'));//java102
+    }
+}
+```
+
 #### 自增自减运算符
 
 #### 赋值运算符
@@ -70,15 +88,190 @@
 
 ### 案例：键盘录入
 
+### 数组
+
+数组内存图
+
+Java内存分配
+
+- 栈：方法运行时所进入的内存
+- 堆：new出来的东西会在这片内存中开辟空间并产生地址
+- 方法区：字节码加载时进入的内存
+- 本地方法栈
+- 寄存器/程序计数器
+
+#### 常见使用问题
+
+- 超过最大索引， ArrayIndexOutOfBoundsException
+- 变量中没有存储数组地址而是null，NullPointerException
+
 ## 面向对象
 
 ### 封装
+
+### JavaBean
+
+### String
+
+#### 常见面试题
+
+#### String类常用API
+
+- length
+- charAt
+- toCharArray
+- subStirng(int begin, int endIndex) 包前不包后 [)
+- subStirng(int begin) 从起始点直接到末尾
+- replace(string1, string2) 把字符串1替换为2
+- contains
+- startsWith
+- public String[] split(String s) 按照某个内容将字符串分割成字符数组返回
+
+#### String案例
+
+- 需求1：随机产生一个5的验证码，可能是数字和大小写字母
+
+- 分析
+
+  - 定义一个String类型的变量存储a-zA-Z0-9之间的全部字符
+  - 循环5次，随机一个范围内的索引，获取对应字符连接起来即可
+
+- 代码
+
+  ```java
+  public class StringDemo1 {
+      public static void main(String[] args) {
+          //定义可能出现的字符信息
+          String data = "a...A...0...";
+  
+          //循环5次，每次生成一个随机索引，提取对应的字符串连接起来即可
+          String code = "";
+          Random r = new Random();
+          for (int i = 0; i < 5; i++) {
+              int index = r.nextInt(data.length());
+              char c = data.charAt(index);
+              code+=c;
+          }
+  
+          //输出字符串变量即可
+          System.out.println(code);
+      }
+  }
+  ```
+
+- 需求2：模拟用户登录功能，最多只给三次机会
+- 分析
+  - 系统后台定义好正确的登录名称，密码
+  - 使用循环控制三次，让用户输入正确的登录名和密码，判断是否登录成功，登录成功则不再进行登录，登录失败则给出提示，让用户继续登录，最多三次
+- 代码
 
 ### 继承
 
 ### 多态
 
+#### 优点
+
+#### 案例
+
+#### 概述
+
+#### 类型转换
+
+```java
+public abstract class Animal {
+    public String name = "父类动物";
+    public abstract void run();
+}
+```
+
+```java
+public class Dog extends Animal {
+    public String name = "子类狗";
+    @Override
+    public void run() {
+        System.out.println("dog run quick");
+    }
+    public void brack(){
+        System.out.println("w w w");
+    }
+}
+```
+
+```java
+public class Tortoise extends Animal {
+    @Override
+    public void run() {
+        System.out.println("tortoise slow");
+    }
+}
+```
+
+```java
+//为了调用子类的独有功能
+//强制类型转换能解决什么问题？需要注意什么？
+//  可以转换成真正的子类型，从而调用子类独有的功能
+//  有继承或实现的两个类型就可以使用强制类型转换，编译无问题
+public class Demo {
+    public static void main(String[] args) {
+        Animal a1 = new Dog();
+        Animal a2 = new Tortoise();
+
+        a1.run();
+        a2.run();
+        //a1.brack();
+
+        //强制类型转换，父类转子类
+        Dog d = (Dog)a1;
+        d.brack();
+
+        //编译阶段不报错，有继承或实现关系，编译阶段可以强制
+        //ClassCastException
+        Dog dd = (Dog) a2;
+
+        //转换类型后如果和真实类型不一样，会抛出异常ClassCastException
+        //建议在使用之前先用instanceof判断当前对象的真是性，再进行强制类型转换
+
+        if(a1 instanceof Dog){
+            Dog ddd = (Dog) a1;
+            ddd.brack();
+        }else if (a1 instanceof Tortoise){
+            Tortoise t = new Tortoise();
+            //t.special_mothod()
+        }
+    }
+
+}
+```
+
 ### 内部类
+
+#### 概述
+
+```java
+public class People {
+
+    public class Heart{
+
+    }
+}
+//一个事物内部还有一个部分需要一个完整的结构描述，而这个额内部的完整结构又只为外部服务，这时候需要使用内部类
+//内部类通常可以方便访问外部类的成员，包括私有成员
+//内部类提供了更好的封装性，内部类本身就可以用private protected修饰，封装性可以做更多控制
+```
+
+#### 内部类分类
+
+##### 静态内部类
+
+##### 成员内部类
+
+##### 局部内部类
+
+##### 匿名内部类
+
+#### 匿名内部类常见使用形式
+
+#### 匿名内部类真实使用场景
 
 ### 常用API
 
@@ -141,7 +334,7 @@
 
 ### JDK8新增日期类
 
-### 包装了
+### 包装类
 
 ### 正则表达式
 
@@ -191,6 +384,17 @@
 ### basi
 
 ### List
+
+#### ArrayList
+
+- 常用API
+  - get(int index)
+  - size()
+  - E remove(int index)
+  - boolean remove(Object o) 
+  - E set(int index, E element)
+
+#### LinkdeList
 
 ### Set
 
@@ -603,7 +807,97 @@ public static Integer valueOf(int i) {
 
 ## 网络编程
 
+- 网络通信的基本模式
+  - CS：客户端需要程序员开发，用户需要安装客户端。Server需要程序员开发实现
+  - DS：用户需要安装浏览器，Server需要程序员开发实现
 
+### 网络通信的三要素
+
+#### IP地址
+
+- 定义：设备在网络中的地址，是唯一标识
+
+#### IP地址操作类-InetAddress
+
+#### 端口号
+
+- 定义：应用程序在设备中的唯一标识
+
+#### 协议
+
+- 定义：数据在网络中传输的规则，常见的协议哟TCP/
+
+### UDP通信
+
+性能高一些
+
+#### UDP快速入门
+
+#### 广播&组播
+
+### TCP通信
+
+#### TP快速入门
+
+#### 多发多收集消息
+
+#### 同时接收多个客户端的消息
+
+#### 使用线程池进行优化
+
+### TCP通信模拟实战
+
+#### 即时通信
+
+#### 模拟BS系统
+
+以后的重心是学习Browser-Server的开发
+
+## 单元测试
+
+### 单元测试概述
+
+- 什么是单元测试
+  - 单元测试就是针对最小的功能单元编写的测试代码，Java程序最小的功能单元是方法，因此单元测试就是针对Java方法的测试，进而检查方法的正确性
+- 目前测试方法是如何进行的？存在什么问题
+  - 只有一个main方法，如果其中的方法失效了，其他的测试方法也会收到影响
+  - 无法得到测试的结果报告，需要自己去观察测试是否成功
+  - 无法实现自动化测试
+- JUnit单元测试框架
+- JUnit优点
+  - 可以灵活的选择执行哪些测试方法，可以以一键执行全部测试方法
+  - JUnit可以生成全部方法的测试报告
+  - 单元测试中的某个方法测试失败后，不会影响其他方法的测试
+- 总结
+  - JUnit单元的的作用
+    - 测试类中方法的正确性
+  - JUnit单元的测试优点
+    - JUnit可以选择执行哪些测试方法，可以一键执行全部测试方法的测试
+    - JUnit可以生成测试报告，如果测试良好则是绿色，如果测试失败则是红色
+    - 单元测试中的某些方法失效不会影响其他测试方法的测试
+
+### 单元测试入门
+
+- 需求：使用单元测试进行业务方法预期结果，正确性测试的快速入门
+- 分析
+  - 将JUnit的jar包导入到项目中
+  - 编写测试方法：该方法必须是公共的无参数，无返回值的非静态方法
+  - 在测试方法的基础上使用@Test注解：表述该方法是一个测试方法
+  - 选中测试方法，选择“JUinit运行”，如果测试良好则为绿色
+- 总结
+  - JUnit单元测试的实现过程是怎么样的？
+    - 必须导入JUnit框架的jar包（如何导入jar包？
+    - 定义的测试方法必须是无参数无返回值，而且被public修饰
+    - 测试方法需要使用@Test注解标记
+
+### 单元测试的常用注解
+
+- 4.0版本
+  - @Test：测试方法
+  - @Before：用来修饰实例方法，该方法会在每个测试方法执行之前执行一次
+  - @After：用来修饰实例方法，该方法会在每一个测试方法执行之后执行一次
+  - @BeforeClass：用来静态修饰方法，该方法会在所有测试方法执行之前执行一次
+  - @AfterClass：用来静态修饰方法，该方法会在所有测试方法之后执行一次
 
 ## 反射&注解
 
