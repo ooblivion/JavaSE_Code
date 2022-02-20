@@ -125,6 +125,8 @@
 
 ## HTML+CSS
 
+### HTML
+
 - HTML框架
 
   ```html
@@ -184,18 +186,215 @@
 - 超链接
 
   ```html
-  
+  <a href="url" target="_blank"></a> <!--self blank parent top>
   ```
 
 - 列表标签
 
+  ```html
+  <ol type="A">
+      <li>aaa</li>
+      <li>bbb</li>
+      <li>ccc</li>
+  </ol>
+  
+  <ul type=cirle>
+      <li>aaa</li>
+      <li>bbb</li>
+      <li>ccc</li>
+  </ul>
+  ```
+
 - 表格标签
+
+  ```html
+  <table width="50%" border="1" cellspacing="0">
+      <tr align="center">
+          <th>number</th>
+          <th>type</th>
+          <th>count</th>
+      </tr>
+      <tr>
+          <td>01</td>
+          <td>type1</td>
+          <td>100</td>
+      </tr>
+  </table>
+  <!--
+  table 表格 width 表格的宽度 border 表格边框宽度 cellspacing 单元格之间的空白
+  td 单元格 rowspan 单元格可跨行数 colspan单元格可跨列数
+  th 表头单元格
+  tr 行 align 定义表格行的内容对其方式
+  
+  -->
+  
+  <table width="80%" border="1" cellspacing="0">
+  
+      <tr align="center">
+          <th colspan="2"></th>
+          <th>星期一</th>
+          <th>星期二</th>
+          <th>星期三</th>
+          <th>星期四</th>
+          <th>星期五</th>
+      </tr>
+  
+      <tr align="center">
+          <td rowspan="4">上午</td>
+          <td>早自习</td>
+          <td>英语</td>
+          <td>语文</td>
+          <td>英语</td>
+          <td>语文</td>
+          <td>英语</td>
+      </tr>
+  
+      <tr align="center">
+          <td>第一节</td>
+          <td>第一节</td>
+          <td>第一节</td>
+          <td>第一节</td>
+          <td>第一节</td>
+          <td>第一节</td>
+      </tr>
+  
+      <tr align="center">
+          <td>第一节</td>
+          <td>第一节</td>
+          <td>第一节</td>
+          <td>第一节</td>
+          <td>第一节</td>
+          <td>第一节</td>
+      </tr>
+  
+      <tr align="center">
+          <td>第一节</td>
+          <td>第一节</td>
+          <td>第一节</td>
+          <td>第一节</td>
+          <td>第一节</td>
+          <td>第一节</td>
+      </tr>
+  
+      <tr align="center">
+          <td colspan="7">午休</td>
+      </tr>
+  
+      <tr align="center">
+          <td rowspan="3">下午</td>
+          <td>第四节</td>
+          <td>生物</td>
+          <td>生物</td>
+          <td>生物</td>
+          <td>生物</td>
+          <td>生物</td>
+      </tr>
+  
+      <tr align="center">
+          <td>第五节</td>
+          <td>数学</td>
+          <td>数学</td>
+          <td>数学</td>
+          <td>数学</td>
+          <td>数学</td>
+      </tr>
+  
+      <tr align="center">
+          <td>第六节</td>
+          <td>英语</td>
+          <td>英语</td>
+          <td>英语</td>
+          <td>英语</td>
+          <td>英语</td>
+      </tr>
+  </table>
+  ```
 
 - 布局标签
 
+  ```html
+  <div></div>
+  <!-- 定义html文档中的一个区域部分，经常与css一起使用，用来布局网页 -->
+  <span></span>
+  <!-- 用于组合行内元素 -->
+  ```
+
 - 表单标签
 
+  ```html
+  <form></form> 定义表单
+  <input> 定义表单项，通过type属性控制输入形式
+  <label></label> 为表单项定义标注
+  <select></select> 定义下拉列表
+  <option></option> 定义下拉列表的列表项
+  <textarea></textarea> 定义文本区域
+  ```
+
+  - form 定义表单
+    - action：规定提交表单时向何处发送数据，URL
+      - 表单数据项想要被提交，则必须指定其name属性
+    - method：规定用于发送表单数据的方式
+      - get：浏览器会将数据附在表单actcion URL之后，大小有限制4kb，默认为get
+      - post：浏览器会将数据放在http请求消息体中，大小无限制
+
+  ```html
+  <form action="#" method="get">
+      <input type="text" name="username">
+      <input type="submit">
+  </form>
+  ```
+
+  
+
+### CSS
+
 ## JavaSript
+
+### 正则表达式
+
+```javascript
+var reg = /^\w{6,12}$S/;
+var reg = new RegExp(/^\w{6,12}$S/)
+```
+
+- 语法
+
+  - `^` 表示开始
+
+  - `$` 表示结束
+
+  - `[]` 代表某个范围内的单个字符，比如`[0-9]`
+
+  - `.` 代表任意单个字符，除了换行和行结束符
+
+  - `\w` 代表单词字符：字母，数字，下划线，相当于`[A-Za-z0-9_]`
+
+  - `\d` 代表数字字符：相当于`[0-9]`
+
+  - `+` 至少一个
+
+  - `*` 0或多个
+
+  - `?` 0或1个
+
+  - {x}：x个
+
+  - {m,}：至少m个
+
+  - {m,n}：最少m个，最多n个，个数范围
+
+    ```javascript
+    var reg = /^\w{6,12}$/;
+    var str = "abcccc"
+    var flag = reg.test(str);
+    alert(falg);//返回true
+    ```
+
+    
+
+- 邮箱的匹配规则
+
+  - ``
 
 ## Ajax+Vue+ElementUI
 

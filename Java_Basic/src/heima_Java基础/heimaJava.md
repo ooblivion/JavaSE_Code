@@ -269,20 +269,92 @@ public class People {
 
 ##### 匿名内部类
 
+
+
 #### 匿名内部类常见使用形式
 
+匿名内部类可以作为方法的形参进行传输
+
 #### 匿名内部类真实使用场景
+
+开发中不是我们主动去定义匿名内部类，而是别人需要我们写或者我们可以写的时候才会使用，匿名内部类可以进一步简化代码
+
+```java
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+/**
+ * @version v1.0
+ * @ClassName: Client
+ * @Description: TODO 类描述
+ * @Author: Orange
+ **/
+public class Client {
+    public static void main(String[] args) {
+        //1. 创建窗口
+        JFrame win = new JFrame("登录界面");
+        JPanel panel = new JPanel();
+        win.add(panel);
+
+        //2. 创建一个按钮对象
+        JButton btn = new JButton("登录");
+
+        //注意：匿名内部类使用
+//        btn.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                JOptionPane.showMessageDialog(win, "点你一下");
+//            }
+//        });
+        //lambda表达式简化
+        btn.addActionListener(e -> JOptionPane.showMessageDialog(win,"哈哈"));
+
+        //3. 把按钮对象添加到桌布展示
+        panel.add(btn);
+
+        //4. 展示窗口
+        win.setSize(400, 300);
+        win.setLocationRelativeTo(null);
+        win.setVisible(true);
+    }
+}
+```
+
+
 
 ### 常用API
 
 #### Object
 
-- toString()
-- equals()
+- toString()：返回当前对象在堆内存中的地址信息
+- equals()：默认比较当前对象那个与哪一个对象的地址是否相同，相同返回true
+
+子类需要重写父类的toString
+
+- Object的equals方法的作用是什么？
+  - 默认的与哪一个对象比较地址是否一样
+  - 让子类重写，以便比较两个子类对象的内容是否相同
 
 #### Objects
 
+Objects与Object是继承关系，但在比较字符串时，没有对象自己的equals方法，而是选择了Objects的equals方法来比较两个对象
+
+Objects的equals方法比较的结果是一样的，但是更安全（内部其实还是调用的Object的equals，只不过在判断之前进行了非空校验
+
+- 对象进行内容比较的时候建议使用什么？
+  - 建议使用Objects提供的equals方法
+  - 比较的结果是一样的，但是更安全
+
 #### StringBuilder
+
+- 概述
+  - 这是一个可变的字符串类，，可以看作是一个对象的容器
+- 构造器
+  - stringBuilder()：创建一个空白的可变字符对象，不包含任何内容
+  - StirngBuilder(String str)：创建一个指定字符串内容可变的字符串对象
+- 目标：学会使用StringBuilder操作字符串，最终还需要知道它性能好的原因
+  - 
 
 #### Math
 
