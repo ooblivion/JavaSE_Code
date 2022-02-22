@@ -354,7 +354,16 @@ Objects的equals方法比较的结果是一样的，但是更安全（内部其�
   - stringBuilder()：创建一个空白的可变字符对象，不包含任何内容
   - StirngBuilder(String str)：创建一个指定字符串内容可变的字符串对象
 - 目标：学会使用StringBuilder操作字符串，最终还需要知道它性能好的原因
-  - 
+- 为什么拼接，反转字符串建议使用StirngBuilder？
+  - String：内容是不可变的，拼接字符串性能较差
+  - StringBuilder：内容是可变的，拼接字符串性能好
+  - 定义字符串使用String
+  - 拼接，修改等操作字符串使用StringBuilder
+- 需求：设计一个方法用于输出任意整型内容，格式：”该数组内容为：[11, 22, 33, 44, 55]“
+  - 分析
+    - 定义一个方法，该方法能够接收数组，并输出数组内容（需要参数吗？需要返回值类型申明吗？
+    - 定义一个静态初始化数组，调用该方法，并传入该数组
+  - 代码
 
 #### Math
 
@@ -522,264 +531,7 @@ Objects的equals方法比较的结果是一样的，但是更安全（内部其�
 
 #### 其他问题
 
-##### 为什么会出现包装类？
-
-- 为了让基本类型也具有对象的特征，就出现了包装类型，它相当于将基本类型“包装起来”，使得它具有了对象的性质，并且为其添加了属性和方法，丰富了基本类型的操作。
-- Java是一种面向对象语言，很多地方都需要使用对象而不是基本数据类型。比如，在集合类中，我们是无法将int 、double等类型放进去的。因为集合的容器要求元素是Object类型。
-
-##### 自动装箱&拆箱细节
-
-```java
-Integer i = new Integer(10);
-
-Integer i =10;//自动装箱
-int j = i;//自动拆箱
-
-//反编译后的代码
-Integer i = Integer.valueOf(10); 
-int j = i.intValue(); 
-```
-
-##### 自动拆装箱的使用场景
-
-- 将基本数据类型放入集合类
-
-  ```java
-  List<Integer> li = new ArrayList<>();
-  for (int i = 1; i < 50; i ++){
-      li.add(i);
-  }
-  
-  
-  List<Integer> li = new ArrayList<>();
-  for (int i = 1; i < 50; i += 2){
-      li.add(Integer.valueOf(i));
-  }
-  ```
-
-- 包装类型和基本类型的大小比较
-
-  ```java
-  Integer a=1;
-  System.out.println(a==1?"等于":"不等于");
-  Boolean bool=false;
-  System.out.println(bool?"真":"假");
-  
-  
-  Integer a=1;
-  System.out.println(a.intValue()==1?"等于":"不等于");
-  Boolean bool=false;
-  System.out.println(bool.booleanValue?"真":"假");
-  ```
-
-- 包装类型的运算
-
-  ```java
-  Integer i = 10;
-  Integer j = 20;
-  System.out.println(i+j);
-  
-  Integer i = Integer.valueOf(10);
-  Integer j = Integer.valueOf(20);
-  System.out.println(i.intValue() + j.intValue());
-  ```
-
-- 三目运算符的使用
-
-  ```java
-  boolean flag = true;
-  Integer i = 0;
-  int j = 1;
-  int k = flag ? i : j;
-  
-  //当第二，第三位操作数分别为基本类型和对象时，其中的对象就会拆箱为基本类型进行操作。
-  boolean flag = true;
-  Integer i = Integer.valueOf(0);
-  int j = 1;
-  int k = flag ? i.intValue() : j;
-  ```
-
-- 函数参数与返回值
-
-  ```java
-  public int getNum1(Integer num) {
-   return num;
-  }
-  //自动装箱
-  public Integer getNum2(int num) {
-   return num;
-  }
-  ```
-
-##### 自动拆装箱与缓存
-
-```java
-public static void main(String... strings) {
- 
-    Integer integer1 = 3;
-    Integer integer2 = 3;
- 
-    if (integer1 == integer2)
-        System.out.println("integer1 == integer2");
-    else
-        System.out.println("integer1 != integer2");
- 
-    Integer integer3 = 300;
-    Integer integer4 = 300;
- 
-    if (integer3 == integer4)
-        System.out.println("integer3 == integer4");
-    else
-        System.out.println("integer3 != integer4");
- 
-}
-```
-
-我们普遍认为上面的两个判断的结果都是false。虽然比较的值是相等的，但是由于比较的是对象，而对象的引用不一样，所以会认为两个if判断都是false的。
-
-在Java中，==比较的是对象应用，而equals比较的是值。
-
-所以，在这个例子中，不同的对象有不同的引用，所以在进行比较的时候都将返回false。奇怪的是，这里两个类似的if条件判断返回不同的布尔值。
-
-但实际结果为
-
-```java
-integer1 == integer2
-integer3 != integer4
-```
-
-**原因就和Integer中的缓存机制有关。**在Java 5中，在Integer的操作上引入了一个新功能来节省内存和提高性能。整型对象通过使用相同的对象引用实现了缓存和重用。
-
-- 适用于整数值区间-128 至 +127
-- 只适用于自动装箱。使用构造函数创建对象不适用
-
-我们只需要知道，当需要进行自动装箱时，如果数字在-128至127之间时，会直接使用缓存中的对象，而不是重新创建一个对象。
-
-其中的javadoc详细的说明了缓存支持-128到127之间的自动装箱过程。最大值127可以通过`-XX:AutoBoxCacheMax=size`修改。
-
-实际上这个功能在Java 5中引入的时候,范围是固定的-128 至 +127。后来在Java 6中，可以通过`java.lang.Integer.IntegerCache.high`设置最大值。
-
-这使我们可以根据应用程序的实际情况灵活地调整来提高性能。到底是什么原因选择这个-128到127范围呢？因为这个范围的数字是最被广泛使用的。 在程序中，第一次使用Integer的时候也需要一定的额外时间来初始化这个缓存。
-
-在Boxing Conversion部分的Java语言规范(JLS)规定如下：
-
-如果一个变量p的值是：
-
-- -128至127之间的整数(§3.10.1)
-- true 和 false的布尔值 (§3.10.3)
-- ‘\u0000’至 ‘\u007f’之间的字符(§3.10.4)
-
-范围内的时，将p包装成a和b两个对象时，可以直接使用a==b判断a和b的值是否相等。
-
-- 自动拆装箱带来的问题
-
-  当然，自动拆装箱是一个很好的功能，大大节省了开发人员的精力，不再需要关心到底什么时候需要拆装箱。但是，他也会引入一些问题。
-
-  > 包装对象的数值比较，不能简单的使用`==`，虽然-128到127之间的数字可以，但是这个范围之外还是需要使用`equals`比较。
-  >
-  > 前面提到，有些场景会进行自动拆装箱，同时也说过，由于自动拆箱，如果包装类对象为null，那么自动拆箱时就有可能抛出NPE。
-  >
-  > 如果一个for循环中有大量拆装箱操作，会浪费很多资源。
-
-##### Java中整型的缓存机制
-
-Java中Integer的缓存相关知识。这是在Java 5中引入的一个有助于节省内存、提高性能的功能。首先看一个使用Integer的示例代码，从中学习其缓存行为。接着我们将为什么这么实现以及他到底是如何实现的。你能猜出下面的Java程序的输出结果吗。
-
-还是上面代码的例子
-
-虽然比较的值是相等的，但是由于比较的是对象，而对象的引用不一样，所以会认为两个if判断都是false的。
-
-在Java中，`==`比较的是对象应用，而`equals`比较的是值。所以，在这个例子中，不同的对象有不同的引用，所以在进行比较的时候都将返回false。奇怪的是，这里两个类似的if条件判断返回不同的布尔值。
-
-- Java中Integer的缓存实现
-  在Java 5中，在Integer的操作上引入了一个新功能来节省内存和提高性能。整型对象通过使用相同的对象引用实现了缓存和重用。
-
-  > 适用于整数值区间-128 至 +127。
-  >
-  > 只适用于自动装箱。使用构造函数创建对象不适用。
-
-Java的编译器把基本数据类型自动转换成封装类对象的过程叫做`自动装箱`，相当于使用`valueOf`方法：
-
-```
-Integer a = 10; //this is autoboxing
-Integer b = Integer.valueOf(10); //under the hood
-```
-
-现在我们知道了这种机制在源码中哪里使用了，那么接下来我们就看看JDK中的`valueOf`方法。
-
-```java
-//下面是JDK 1.8.0 build 25的实现
-public static Integer valueOf(int i) {
-    if (i >= IntegerCache.low && i <= IntegerCache.high)
-        return IntegerCache.cache[i + (-IntegerCache.low)];
-    return new Integer(i);
-}
-```
-
-在创建对象之前先从IntegerCache.cache中寻找。如果没找到才使用new新建对象。
-
-- IntegerCache 类
-  IntegerCache是Integer类中定义的一个`private static`的内部类。接下来看看他的定义。
-
-  ```java
-  private static class IntegerCache {
-      static final int low = -128;
-      static final int high;
-      static final Integer cache[];
-  
-      static {
-          // high value may be configured by property
-          int h = 127;
-          String integerCacheHighPropValue =
-              sun.misc.VM.getSavedProperty("java.lang.Integer.IntegerCache.high");
-          if (integerCacheHighPropValue != null) {
-              try {
-                  int i = parseInt(integerCacheHighPropValue);
-                  i = Math.max(i, 127);
-                  // Maximum array size is Integer.MAX_VALUE
-                  h = Math.min(i, Integer.MAX_VALUE - (-low) -1);
-              } catch( NumberFormatException nfe) {
-                  // If the property cannot be parsed into an int, ignore it.
-              }
-          }
-          high = h;
-  
-          cache = new Integer[(high - low) + 1];
-          int j = low;
-          for(int k = 0; k < cache.length; k++)
-              cache[k] = new Integer(j++);
-  
-          // range [-128, 127] must be interned (JLS7 5.1.7)
-          assert IntegerCache.high >= 127;
-      }
-  
-      private IntegerCache() {}
-  }
-  ```
-
-  其中的javadoc详细的说明了缓存支持-128到127之间的自动装箱过程。最大值127可以通过`-XX:AutoBoxCacheMax=size`修改。 缓存通过一个for循环实现。从低到高并创建尽可能多的整数并存储在一个整数数组中。这个缓存会在Integer类第一次被使用的时候被初始化出来。以后，就可以使用缓存中包含的实例对象，而不是创建一个新的实例(在自动装箱的情况下)。
-
-  实际上这个功能在Java 5中引入的时候,范围是固定的-128 至 +127。后来在Java 6中，可以通过`java.lang.Integer.IntegerCache.high`设置最大值。这使我们可以根据应用程序的实际情况灵活地调整来提高性能。到底是什么原因选择这个-128到127范围呢？因为这个范围的数字是最被广泛使用的。 在程序中，第一次使用Integer的时候也需要一定的额外时间来初始化这个缓存。
-
-- Java语言规范中的缓存行为
-  在Boxing Conversion部分的Java语言规范(JLS)规定如下：
-  如果一个变量p的值是：
-
-  - -128至127之间的整数(§3.10.1)
-  - true 和 false的布尔值 (§3.10.3)
-  - ‘\u0000’至 ‘\u007f’之间的字符(§3.10.4)
-
-  中时，将p包装成a和b两个对象时，可以直接使用a==b判断a和b的值是否相等。
-
-- 其他缓存的
-  这种缓存行为不仅适用于Integer对象。我们针对所有的整数类型的类都有类似的缓存机制。
-
-  - 有ByteCache用于缓存Byte对象
-  - 有ShortCache用于缓存Short对象
-  - 有LongCache用于缓存Long对象
-  - 有CharacterCache用于缓存Character对象
-
-  `Byte`, `Short`, `Long`有固定范围: -128 到 127。对于`Character`, 范围是 0 到 127。除了`Integer`以外，这个范围都不能改变。
+- 
 
 ### 集合常用API
 
@@ -870,6 +622,20 @@ public static Integer valueOf(int i) {
 ## IO流
 
 
+
+## 异常
+
+### 自定义异常
+
+- 自定义编译时异常
+  - 定义一个异常类继承Exception
+  - 重写构造器
+  - 在出现异常的地方用throw new 自定义对象抛出
+  - 编译时异常在编译阶段就会报错，一定要处理
+- 自定义运行时异常
+  - 定义一个异常类继承RuntimeException
+  - 重写构造器
+  - 在出现异常的地方用throw new 自定义对象抛出
 
 
 
