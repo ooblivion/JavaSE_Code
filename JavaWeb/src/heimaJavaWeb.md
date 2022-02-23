@@ -908,6 +908,99 @@ public class DriveManagerDemo {
 
 ### MyBatis快速入门
 
+- 查询user表中的所有数据
+  1. 创建user表，添加数据
+  2. 创建模块，导入坐标
+  3. 编写MyBatis核心配置文件 -> 替换连接信息 解决硬编码问题
+  4. 编写SQL映射文件 -> 统一管理SQL语句，解决硬编码问题
+  5. 编码
+     - 定义POJO类
+     - 加载核心配置文件，获取SqlSessionFactory对象
+     - 获取SqlSession对象，执行SQL语句（Statement
+     - 释放资源
+
+1. 先创建一个表
+
+```sql
+DROP TABLE IF EXISTS tb_user;
+CREATE TABLE tb_user(
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	username VARCHAR(20),
+	password VARCHAR(20),
+	gender CHAR(1),
+	addr VARCHAR(30)
+);
+INSERT INTO tb_user VALUES 
+(1, 'zhangsan', '123', '男', '北京'),
+(2, '李四', '234', '女', '天津'),
+(3, 'wangwu', '222', '男', '上海')
+```
+
+2. 在pom.xml中添加依赖，mysql的驱动和mybatis
+
+```xml
+<dependencies>
+     <dependency>
+        <groupId>org.mybatis</groupId>
+        <artifactId>mybatis</artifactId>
+        <version>3.3.0</version>
+    </dependency>
+    <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.25</version>
+     </dependency>
+  </dependencies>
+```
+
+添加logback.xml到main-resources中
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- CONSOLE : 表示档前的日志是可以输出到控制台的 -->
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%level] %blue(%d{HH:mm:ss.SSS}) %cyan([%thread]) %boldGreen(%logger{15}) - %msg %n</pattern>
+        </encoder>
+    </appender>
+
+    <logger nam="com.itheima" level="DEBUG" additivity="false">
+        <appender-ref ref="Console"/>
+    </logger>
+</configuration>
+```
+
+3. 编写MyBatis核心配置文件 -> 替换连接信息 解决硬编码问题
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://127.0.0.1:3306/db_study?useSSL=false"/>
+                <property name="username" value="root"/>
+                <property name="password" value="wwtooblivion"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <!-- 加载SQL的映射文件，等会来修改-->
+        <mapper resource="org/mybatis/example/BlogMapper.xml"/>
+    </mappers>
+</configuration>
+```
+
+
+
+
+
 ### 解决SQL语句警告提示
 
 ### Mapper代理开发
@@ -1656,8 +1749,23 @@ var reg = new RegExp(/^\w{6,12}$S/)
 - 请求头：第二行开始，格式为key:value形式
 
   - 常见的请求头
-    - Host：表示请求的主机名
-    - User-Agent：浏览器版本，例如Chrome
+    - **Host**：表示请求的主机名
+    - **User-Agent**：浏览器版本，例如Chrome浏览器的标识类似Mozilla/5.0...Chrome/79，IE浏览器的标识类似Mozilla/5.0(Windows NT ...) like Gecko，一般用于浏览器的兼容处理
+    - **Accept**：标识浏览器能接收的资源类型，比如`text/*`，`image/*`，或者*/*表示所有
+    - **Accept-Language**：表示浏览器偏好的语言，服务器可以根据这个返回不同语言的网页
+    - **Accept-Encoding**：表示可以支持的压缩类型，例如gzip，deflate，Servlet能够向支持gzip的浏览器返回经gzip编码的HTML页面。许多情形下这可以减少5到10倍的下载时间
+    - **Accept-Charset**：浏览器可接受的字符集
+    - **Authorization**：授权信息，通常出现在对服务器发送的WWW-Authenticate头的应答中
+    - **Connection**：表示是否需要持久连接。如果Servlet看到这里的值为“Keep-Alive”，或者看到请求使用的是HTTP 1.1（HTTP 1.1默认进行持久连接），它就可以利用持久连接的优点，当页面包含多个元素时（例如Applet，图片），显著地减少下载所需要的时间。要实现这一点，Servlet需要在应答中发送一个Content-Length头，最简单的实现方法是：先把内容写入ByteArrayOutputStream，然后在正式写出内容之前计算它的大小
+    - **Content-Length**：表示请求消息正文的长度
+    - **Cookie**：这是最重要的请求头信息之一
+    - **From**：请求发送者的email地址，由一些特殊的Web客户程序使用，浏览器不会用到它
+    - **Host**：初始URL中的主机和端口
+    - **If-Modified-Since**：只有当所请求的内容在指定的日期之后又经过修改才返回它，否则返回304“Not Modified”应答
+    - **Pragma**：指定“no-cache”值表示服务器必须返回一个刷新后的文档，即使它是代理服务器而且已经有了页面的本地拷贝
+    - **Referer**：包含一个URL，用户从该URL代表的页面出发访问当前请求的页面
+    - **User-Agent**：浏览器类型，如果Servlet返回的内容与浏览器类型有关则该值非常有用
+    - **UA-Pixels****，UA-Color，UA-OS，UA-CPU**：由某些版本的IE浏览器所发送的非标准的请求头，表示屏幕大小、颜色深度、操作系统和CPU类型
 
 - 请求体：POST请求的最后一部分，存放请求参数
 
@@ -1684,39 +1792,60 @@ var reg = new RegExp(/^\w{6,12}$S/)
 
 - HTTP的请求方式有7中，现在只知道GET和POST
 
-HTTP最常见的请求头如下：
+- GET请求和POST请求的区别
 
-l     **Accept**：浏览器可接受的MIME类型；
-
-l     **Accept-Charset**：浏览器可接受的字符集；
-
-l     **Accept-Encoding**：浏览器能够进行解码的数据编码方式，比如gzip。Servlet能够向支持gzip的浏览器返回经gzip编码的HTML页面。许多情形下这可以减少5到10倍的下载时间；
-
-l     **Accept-Language**：浏览器所希望的语言种类，当服务器能够提供一种以上的语言版本时要用到；
-
-l     **Authorization**：授权信息，通常出现在对服务器发送的WWW-Authenticate头的应答中；
-
-l     **Connection**：表示是否需要持久连接。如果Servlet看到这里的值为“Keep-Alive”，或者看到请求使用的是HTTP 1.1（HTTP 1.1默认进行持久连接），它就可以利用持久连接的优点，当页面包含多个元素时（例如Applet，图片），显著地减少下载所需要的时间。要实现这一点，Servlet需要在应答中发送一个Content-Length头，最简单的实现方法是：先把内容写入ByteArrayOutputStream，然后在正式写出内容之前计算它的大小；
-
-l     **Content-Length**：表示请求消息正文的长度；
-
-l     **Cookie**：这是最重要的请求头信息之一；
-
-l     **From**：请求发送者的email地址，由一些特殊的Web客户程序使用，浏览器不会用到它；
-
-l     **Host**：初始URL中的主机和端口；
-
-l     **If-Modified-Since**：只有当所请求的内容在指定的日期之后又经过修改才返回它，否则返回304“Not Modified”应答；
-
-l     **Pragma**：指定“no-cache”值表示服务器必须返回一个刷新后的文档，即使它是代理服务器而且已经有了页面的本地拷贝；
-
-l     **Referer**：包含一个URL，用户从该URL代表的页面出发访问当前请求的页面。
-
-l     **User-Agent**：浏览器类型，如果Servlet返回的内容与浏览器类型有关则该值非常有用；
-
-l     **UA-Pixels****，UA-Color，UA-OS，UA-CPU**：由某些版本的IE浏览器所发送的非标准的请求头，表示屏幕大小、颜色深度、操作系统和CPU类型。
+  - GET请求：请求参数在请求行中，没有请求体，而且请求参数大小有限制
+  - POST请求：请求参数在请求体中，请求参数大小没有限制
 
 #### 响应数据格式
+
+- 响应行：响应数据第一行，其中HTTP/1.1表示协议版本，200表示响应状态码，OK表示状态码描述
+
+- 响应头：第二行开始，格式为key:value形式
+
+- 响应体：最后一部分，存放响应数据
+
+- 还是以百度的响应树为例
+
+  ```http
+  HTTP/1.1 200 OK
+  Bdpagetype: 2
+  Bdqid: 0xc49da745000792f4
+  Cache-Control: private
+  Connection: keep-alive
+  Content-Encoding: gzip
+  Content-Type: text/html;charset=utf-8
+  Date: Wed, 23 Feb 2022 07:46:20 GMT
+  Expires: Wed, 23 Feb 2022 07:46:20 GMT
+  Server: BWS/1.1
+  Set-Cookie: BDSVRTM=402; path=/
+  Set-Cookie: BD_HOME=1; path=/
+  Set-Cookie: H_PS_PSSID=35837_35104_31254_35768_35489_35865_34584_35490_35246_35949_35954_35319_26350_35882_35879_22157; path=/; domain=.baidu.com
+  Strict-Transport-Security: max-age=172800
+  Traceid: 1645602380075325799414167663917572526836
+  X-Frame-Options: sameorigin
+  X-Ua-Compatible: IE=Edge,chrome=1
+  Transfer-Encoding: chunked
+  ```
+
+- 响应状态码的几种类型
+  - 1：响应中，临时状态码，表示请求已经接受，告诉客户端应该继续请求或者如果他已经完成则忽略它
+  - 2：成功，表示响应已经被成功接收，处理完成
+    - 200 OK 客户端**处理成功**
+  - 3：重定向，重定向到其他地方，让客户端再发起一个请求以完成整个处理
+    - 302 Found 指示所请求的资源已移动到Location响应头给定的URL，浏览器会自动重新返回到这个页面
+    - 304 Not Modified 告诉客户端上次资源请求后服务端并未更改，直接用本地缓存中的数据
+  - 4：客户端错误，处理发生错误，责任在客户端，如：客户端请求一个不存在的资源，客户端没有被授权，禁止访问等。
+    - 400 Bad Request 客户端请求**语法错误**，不能被服务器理解
+    - 403 Forbidden 服务器收到请求但**拒绝提供服务**，比如没有权限访问相关资源
+    - 404 Not Found **请求资源不存在**，一般是URL输入有误或网站资源被删除了
+    - 428 Precondition Require **服务器要有条件的请求**是，告诉客户端想要访问该资源必须携带特定的请求头
+  - 5：服务端错误，处理发送错误，责任在服务端，如：服务端抛出异常，路由错误，HTTP版本不支持等
+- 常见的HTTP响应头
+  - **Content-Type**：表示响应内容的类型，例如text/html，image/jpeg
+  - **Content-Length**：表示响应内容的长度（字节数）
+  - **Content-Encoding**：表示该响应压缩算法，例如gzip
+  - **Cache-Control**：指示客户端应该如何缓存，例如max-age=300，表述最多可以缓存300秒
 
 ## Request请求+Response响应
 
