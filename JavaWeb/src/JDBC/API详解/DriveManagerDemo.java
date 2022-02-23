@@ -1,4 +1,4 @@
-package JDBC;
+package JDBC.API详解;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,11 +6,11 @@ import java.sql.Statement;
 
 /**
  * @version v1.0
- * @ClassName: Demo1
+ * @ClassName: DriveManagerDemo
  * @Description: TODO 类描述
  * @Author: Orange
  **/
-public class Demo1 {
+public class DriveManagerDemo {
     public static void main(String[] args) throws Exception{
         //1. 注册驱动
         Class.forName("com.mysql.cj.jdbc.Driver");

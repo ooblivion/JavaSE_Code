@@ -181,8 +181,6 @@ LIMIT
 
 #### DCL 数据控制语言 用来定义数据库访问权限和安全级别以创建用户
 
-## JDBC
-
 ---
 
 ## 数据库内部
@@ -428,9 +426,10 @@ WHERE emp.dep_id = dept.did;
     SELECT 字段列表 FROM (子查询) WHERE 条件;
     ```
 
-    
 
 ### 事物
+
+事物是SQL语句执行的最小单位
 
 
 
@@ -440,12 +439,101 @@ JDBC是用Java语言操作关系型数据库的一套API，去MySQL官网下载c
 
 ### JDBC快速入门
 
+```sql
+-- 菜鸟教程
+CREATE TABLE `websites` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` char(20) NOT NULL DEFAULT '' COMMENT '站点名称',
+  `url` varchar(255) NOT NULL DEFAULT '',
+  `alexa` int(11) NOT NULL DEFAULT '0' COMMENT 'Alexa 排名',
+  `country` char(10) NOT NULL DEFAULT '' COMMENT '国家',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+
+INSERT INTO `websites` VALUES ('1', 'Google', 'https://www.google.cm/', '1', 'USA'), ('2', '淘宝', 'https://www.taobao.com/', '13', 'CN'), ('3', '菜鸟教程', 'http://www.runoob.com', '5892', ''), ('4', '微博', 'http://weibo.com/', '20', 'CN'), ('5', 'Facebook', 'https://www.facebook.com/', '3', 'USA');
+```
+
+```java
+//菜鸟教程
+public class MySQLDemo {
+
+//    MySQL 8.0 以下版本 - JDBC 驱动名及数据库 URL
+//    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+//    static final String DB_URL = "jdbc:mysql://localhost:3306/RUNOOB";
+
+    // MySQL 8.0 以上版本 - JDBC 驱动名及数据库 URL
+    static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
+    static final String DB_URL = "jdbc:mysql://localhost:3306/db_study?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+
+
+    // 数据库的用户名与密码，需要根据自己的设置
+    static final String USER = "root";
+    static final String PASS = "wwtooblivion";
+
+    public static void main(String[] args) {
+        Connection conn = null;
+        Statement stmt = null;
+        try{
+            // 注册 JDBC 驱动
+            Class.forName(JDBC_DRIVER);
+
+            // 打开链接
+            System.out.println("连接数据库...");
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+
+            // 执行查询
+            System.out.println(" 实例化Statement对象...");
+            stmt = conn.createStatement();
+            String sql;
+            sql = "SELECT id, name, url FROM websites";
+            ResultSet rs = stmt.executeQuery(sql);
+
+            // 展开结果集数据库
+            while(rs.next()){
+                // 通过字段检索
+                int id  = rs.getInt("id");
+                String name = rs.getString("name");
+                String url = rs.getString("url");
+
+                // 输出数据
+                System.out.print("ID: " + id);
+                System.out.print(", 站点名称: " + name);
+                System.out.print(", 站点 URL: " + url);
+                System.out.print("\n");
+            }
+            // 完成后关闭
+            rs.close();
+            stmt.close();
+            conn.close();
+        }catch(SQLException se){
+            // 处理 JDBC 错误
+            se.printStackTrace();
+        }catch(Exception e){
+            // 处理 Class.forName 错误
+            e.printStackTrace();
+        }finally{
+            // 关闭资源
+            try{
+                if(stmt!=null) stmt.close();
+            }catch(SQLException se2){
+            }// 什么都不做
+            try{
+                if(conn!=null) conn.close();
+            }catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+        System.out.println("Goodbye!");
+    }
+}
+```
+
 ```java
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 //哈哈，这都给我连上了。置顶
-public class Demo1 {
+public class DriveManagerDemo {
     public static void main(String[] args) throws Exception{
         //1. 注册驱动
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -478,19 +566,321 @@ public class Demo1 {
 
 ### JDBC API 详解
 
-- DriverManager 注册驱动，获取数据库连接
+#### **DriverManager** 注册驱动，获取数据库连接
 
-  - ```java
-    Class.forName("com.mysql.jdbc.driver");
+- ```java
+  Class.forName("com.mysql.jdbc.driver");
+  
+  Connection conn = DriverManager.getConnection(url, username, password);
+  ```
+
+#### **Connection**
+
+- 获取执行SQL的对象
+
+  - 普通执行对象：`Statement createStatement`
+  - 预编译SQL的执行SQL对象，防止SQL注入：`PreparedStatement prepareStatement(sql)`
+  - 执行存储过程的对象：`CallableStatement prepareCall(sql)`
+
+- ***事物管理***
+
+  - MySQL事物管理（MySQL默认自动提交事物
+    - 开启事物：BEGIN; /START TRANSACTION
+    - 提交事物：COMMIT
+    - 回滚事物：ROLLBACK
+  - JDBC事物管理：Connection中定义了三个对应的方法
+    - 开启 setAutoCommit(boolean autoCommit); //true为自动提交事物
+    - 提交 commit()
+    - 回滚 rollback()
+
+- 代码示例
+
+  ```java
+  public class ConnectionDemo {
+      public static void main(String[] args) throws Exception{
+          //1. 注册驱动
+          Class.forName("com.mysql.cj.jdbc.Driver");
+  
+          //2. 获取连接对象
+          String url = "jdbc:mysql://127.0.0.1:3306/db_study?useSSL=false";
+          String username = "root";
+          String password = "wwtooblivion";
+          Connection conn = DriverManager.getConnection(url, username, password);
+  
+          //3. 定义sql
+          String sql1 = "update emp set salary = 90000 where id = 1";
+          String sql2 = "update emp set salary = 80000 where id = 2";
+  
+          //4. 获取执行sql的对象
+          Statement stmt = conn.createStatement();
+  
+          try {
+              //保证事物的原子性（一个整体，但凡有异常就要要回滚事物
+              //开启事物（关闭自动提交
+              conn.setAutoCommit(false);
+  
+              int count1 = stmt.executeUpdate(sql1);
+              System.out.println(count1);
+              //int i = 3/0;
+              int count2 = stmt.executeUpdate(sql2);
+              System.out.println(count2);
+  
+              //提交事物
+              conn.commit();
+  
+          } catch (Exception throwables) {
+              //回滚事物
+              conn.rollback();
+              throwables.printStackTrace();
+          }
+  
+          //7. 释放资源
+          stmt.close();
+          conn.close();
+  
+      }
+  }
+  ```
+
+#### **Statement**
+
+- 执行SQL语句
+  - `int executeUpdate(sql)` 
+    - 执行DML，DDL语句
+    - 返回值为DML语句影响的行数，DDL语句执行后也可能返回0
+  - `ResultSet executeQuery(sql)` 
+    - 执行DQL语句
+    - 返回值ResultSet结果对象
+
+####  **ResultSet**
+
+- 封装了DQL查询语句的结果
+
+  - `ResultSet stmt.exeuteQuery(sql)`
+
+    - 执行DQL语句，返回ResultSet对象
+
+  - 获取查询结果
+
+    - `boolean next()` 
+      - 将光标从当前位置向前移动一行，判断当前行是否为有效行
+    - `xxx getXxx(参数)` `int getInt(1)` `String getString("name")`  
+      - 参数为int，代表列的编号从1开始（不是0）；参数为String，列的名称
+
+  - 代码示例
+
+    ```java
+    public class ResultSetDemo {
+        public static void main(String[] args) throws Exception{
+            //1. 注册驱动
+            Class.forName("com.mysql.cj.jdbc.Driver");
+    
+            //2. 获取连接对象
+            String url = "jdbc:mysql://127.0.0.1:3306/db_study?useSSL=false";
+            String username = "root";
+            String password = "wwtooblivion";
+            Connection conn = DriverManager.getConnection(url, username, password);
+    
+            //3. 定义sql
+            String sql = "select * from emp";
+    
+            //4. 获取执行sql的对象
+            Statement stmt = conn.createStatement();
+    
+            //5. 执行sql
+            ResultSet rs = stmt.executeQuery(sql);
+    
+            //6. 处理结果 遍历rs中的所有数据
+            while(rs.next()){
+                int id = rs.getInt(1);
+                String NAME = rs.getString(2);
+                double salary = rs.getDouble(4);
+                System.out.println(id);
+                System.out.println(NAME);
+                System.out.println(salary);
+                System.out.println("===");
+            }
+    
+            //7. 释放资源
+            rs.close();
+            stmt.close();
+            conn.close();
+        }
+    }
     ```
 
-- Connection
+- ResultSet案例：查询emp数据表，封装为employee对象，并且存户到ArrayList集合中
 
-- Statement
+  ```java
+      /**
+       * 查询emp数据表，封装为Employee对象，并且存户到ArrayList集合中，一般用pojo包来存放实体类
+       * 1. 定义实体类
+       * 2. 查询数据，封装到Employee对象中
+       * 3. 将Employee对象存入ArrayList中
+       * @throws Exception
+       */
+      @Test
+      public void testResultSet2() throws Exception{
+          Class.forName("com.mysql.cj.jdbc.Driver");
+  
+          String url = "jdbc:mysql://127.0.0.1:3306/db_study?useSSL=false";
+          String username = "root";
+          String password = "wwtooblivion";
+          Connection conn = DriverManager.getConnection(url, username, password);
+  
+          String sql = "select * from emp";
+  
+          Statement stmt = conn.createStatement();
+  
+          ResultSet rs = stmt.executeQuery(sql);
+  
+          //创建集合
+          List<Employee> list = new ArrayList<>();
+  
+          while(rs.next()){
+              Employee employee = new Employee();
+              int id = rs.getInt(1);
+              String NAME = rs.getString(2);
+              double salary = rs.getDouble(4);
+  
+              //赋值
+              employee.setId(id);
+              employee.setNAME(NAME);
+              employee.setSalary(salary);
+  
+              list.add(employee);
+          }
+  
+          System.out.println(list);
+  
+          rs.close();
+          stmt.close();
+          conn.close();
+      }
+  ```
 
-- ResultSet
+#### **PreparedStatement** 
 
-- PreparedStatement
+- 预编译可以解决SQL注入的问题
+
+- 什么是SQL注入：通过操作输入来修改事先预定好的语句，用以达到执行代码对服务器进行攻击的方法
+
+- 先创建用户表
+
+  ```sql
+  -- 删除tb_user表
+  DROP TABLE IF EXISTS tb_goods;
+  
+  -- 创建tb_user表
+  CREATE TABLE tb_user(
+  	id INT,
+  	username VARCHAR(20),
+  	password VARCHAR(32)
+  );
+  
+  -- 添加用户数据
+  INSERT INTO tb_user VALUES
+  (1,'mike','123'),
+  (2,'lineda','234');
+  
+  SELECT * FROM tb_user;
+  ```
+
+- SQL注入（拼字符串改变了sql语义
+
+  ```java
+      /**
+       * 简单演示一些SQL注入
+       * @throws Exception
+       */
+      @Test
+      public void testLogin_inject() throws Exception {
+          Class.forName("com.mysql.cj.jdbc.Driver");
+  
+          String url = "jdbc:mysql://127.0.0.1:3306/db_study?useSSL=false";
+          String username = "root";
+          String password = "wwtooblivion";
+          Connection conn = DriverManager.getConnection(url, username, password);
+  
+  //        String name ="mike";
+  //        String pwd = "123";
+          String name = "xxxxx";
+          String pwd = "' or '1' = '1";
+  //        String sql = "SELECT * FROM tb_user";
+          String sql = "SELECT * FROM tb_user WHERE username= '"+name+"' and password = '"+pwd +"'";
+  
+          Statement stmt = conn.createStatement();
+          ResultSet rs = stmt.executeQuery(sql);
+  
+          //判断登录是否成功
+          if(rs.next()){
+              System.out.println("successful");
+          }else {
+              System.out.println("failure");
+          }
+  
+          //释放资源
+          rs.close();
+          stmt.close();
+          conn.close();
+  
+      }
+  ```
+
+- 防止SQL注入
+
+  ```java
+      @Test
+      public void testPrepareStatement() throws Exception {
+          Class.forName("com.mysql.cj.jdbc.Driver");
+  
+          String url = "jdbc:mysql://127.0.0.1:3306/db_study?useSSL=false";
+          String username = "root";
+          String password = "wwtooblivion";
+          Connection conn = DriverManager.getConnection(url, username, password);
+  
+  //        String name ="mike";
+  //        String pwd = "123";
+          String name = "xxxxx";
+          String pwd = "' or '1' = '1";
+  
+  //        String sql = "SELECT * FROM tb_user";
+  //        String sql = "SELECT * FROM tb_user WHERE username= '"+name+"' and password = '"+pwd +"'";
+          String sql = "SELECT * FROM tb_user WHERE username= ? and password = ?";
+  
+          PreparedStatement pstmt = conn.prepareStatement(sql);
+          pstmt.setString(1,name);//设置第一个?
+          pstmt.setString(2,pwd);//设置第二个?
+  
+          ResultSet rs = pstmt.executeQuery();
+  
+          //判断登录是否成功
+          if(rs.next()){
+              System.out.println("successful");
+          }else {
+              System.out.println("failure");
+          }
+  
+          //释放资源
+          rs.close();
+          pstmt.close();
+          conn.close();
+      }
+  ```
+
+- PrepareStatement原理
+
+  - 好处
+    - 预编译SQL，性能更高
+    - 防止SQL注入，将敏感字符进行转义
+  - 预编译功能开启
+    - `useServicePrepStmts=true`
+    - `String url = "jdbc:mysql://127.0.0.1:3306/db_study?useSSL=false&useServicePrepStmts=true";`
+  - 配置MySQL执行日志（重启mysql后生效）
+  - 原理
+    - 在获取PreparedStatement对象时，将sql语句发送给MySQL服务器进行检查，编译（这步比较耗时）
+    - 执行时不用再检查这些步骤，速度更快
+    - 如果sql模板一样，则只需要进行一次检查（一般是要先检查，再编译，再执行）
 
 ### 数据库连接池
 
@@ -499,6 +889,36 @@ public class Demo1 {
 ## Maven
 
 ## MyBatis
+
+### MyBatis概述
+
+- 什么是MyBatis？
+  - MyBatis 是一个开源、轻量级的数据**持久化框架**，是 JDBC 和 Hibernate 的替代方案。MyBatis 内部封装了 JDBC，简化了加载驱动、创建连接、创建 statement 等繁杂的过程，开发者只需要关注 SQL 语句本身（用于简化JDBC开发）。
+- 持久层
+  - 负责将数据保存到数据库那一层的代码
+  - JavaEE三次架构：表现层，业务层，**持久层**
+- 框架
+  - 框架就是一个半成品软件，是一套可重用的，通用的，软件基础代码模型
+  - 在框架的基础架构之上构建软件编写更加高效，规范，通用，可拓展
+
+|               JDBC缺点               | MyBatis优化              |
+| :----------------------------------: | ------------------------ |
+|      硬编码：注册驱动，SQL语句       | 将字符串信息写入配置文件 |
+| 操作繁琐：手动设置参数，手动封装结果 | 自动完成                 |
+
+### MyBatis快速入门
+
+### 解决SQL语句警告提示
+
+### Mapper代理开发
+
+### MyBatis核心配置文件
+
+### MyBatis案例
+
+### 
+
+### 
 
 # 前端
 
@@ -1200,19 +1620,115 @@ var reg = new RegExp(/^\w{6,12}$S/)
 
   - ``
 
-## Ajax+Vue+ElementUI
+## 
 
 # Web核心
 
+- 什么是JavaWeb
+  - Web是广域网，也叫万维网，是能通过浏览器访问呢的网站
+  - 用Java的技术来解决相关web互联网领域的技术栈
+- JavaWeb技术栈
+  - B/S架构：Browser/Server，浏览器/服务器架构模式，客户端只需要浏览器，应用程序和逻辑数据都放在服务器端。浏览器只需要请求服务器，获取Web资源，服务器把Web资源发送给浏览器即可。（请求和响应）
+  - 好处：易于维护升级，服务端升级后，客户端无需任何部署就可以使用到最新的版本
+  - 静态资源：HTML/CSS/JS，图片等，负责页面展现
+  - 动态资源：***Servlet*** JSP ，负责逻辑处理
+  - 数据库：负责存储数据
+  - ***HTTP协议***：定义通信规则
+  - Web服务器***Tomcat***：负责解析HTTP协议，解析请求数据，并发送响应数据
+
 ## Tomcat+HTTP+Servlet
 
-## Request+Response
+### HTTP
 
-## JSP
+#### HTTP简介
 
-## Cooki+Session
+- HTTP协议特点
+  - 基于TCP协议，面向连接，安全
+  - 基于请求-响应模型，一次请求对应一次响应
+  - HTTP协议是**无状态**的协议，对于事物处理没有记忆能力，每次请求-响应都是独立的
+    - 缺点：多次请之间无法共享数据，**Java中会使用会话技术（Cookie/Session）来解决这个问题**
+    - 优点：速度块
 
-## Filter+Listerer
+#### 请求数据格式
+
+- 请求行：请求数据的第一行，其中GET表示请求的方式，/表示请求的路径，HTTP/1.1表示协议的版本
+
+- 请求头：第二行开始，格式为key:value形式
+
+  - 常见的请求头
+    - Host：表示请求的主机名
+    - User-Agent：浏览器版本，例如Chrome
+
+- 请求体：POST请求的最后一部分，存放请求参数
+
+- 以百度的http为示例
+
+  ```http
+  GET / HTTP/1.1
+  Host: www.baidu.com
+  Connection: keep-alive
+  sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="98", "Google Chrome";v="98"
+  sec-ch-ua-mobile: ?0
+  sec-ch-ua-platform: "Windows"
+  Upgrade-Insecure-Requests: 1
+  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.82 Safari/537.36
+  Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+  Sec-Fetch-Site: none
+  Sec-Fetch-Mode: navigate
+  Sec-Fetch-User: ?1
+  Sec-Fetch-Dest: document
+  Accept-Encoding: gzip, deflate, br
+  Accept-Language: zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7,ja-JP;q=0.6,ja;q=0.5
+  Cookie: BIDUPSID=B31CCC99431B123E381179771AE63F5D; PSTM=1607960531; __yjs_duid=1_83a0f3d55e8eee05518aa34352a572081619616586930; H_WISE_SIDS=107313_110085_127969_131861_168388_176398_176554_177370_178384_178530_178626_179347_179467_179623_181106_181133_181135_181487_181588_181713_181872_182000_182240_182273_182529_183035_183236_183328_183346_183536_183581_183611_183975_184042_184245_184320_184560_184736_184789_184794_184811_184893_185029_185251_185288_185300_185498_185518_185651_185747_185903_186014_186314_186317_186412_186539_186595_186660_186661_186716_186841_186895_187038_187195_187201_187214_187282_187293_187325_187390_187417_187432_187450_187662_8000090_8000101_8000130_8000139_8000143_8000150_8000162_8000175_8000186_8000189; BDUSS=FVNV1dWdHl3OWNNWmFYeGx6dFh1cjRJVUpXTlZDUTl4OVhIam10Mi1abnAzbmRoRVFBQUFBJCQAAAAAAAAAAAEAAAC1HgiPtt6439Gn1PwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOlRUGHpUVBhT; BDUSS_BFESS=FVNV1dWdHl3OWNNWmFYeGx6dFh1cjRJVUpXTlZDUTl4OVhIam10Mi1abnAzbmRoRVFBQUFBJCQAAAAAAAAAAAEAAAC1HgiPtt6439Gn1PwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOlRUGHpUVBhT; BD_UPN=12314753; BAIDUID=D7AF3A23C79717E82B14EAF89ACDCDAF:FG=1; BDORZ=FFFB88E999055A3F8A630C64834BD6D0; BAIDUID_BFESS=D7AF3A23C79717E82B14EAF89ACDCDAF:FG=1; delPer=0; BD_CK_SAM=1; PSINO=5; ab_sr=1.0.1_M2Y3MWZjODIyMTllMTU3YjQ3MjYyMjcyNzU5YzIyM2E1YWI0YzY2NmRiYTRlMzljMjhhZWExMjg1OWRkOTg3YzgzMTYzNDlkMzdhMTBiNmY4ODU1NjAwOTMxOTVkMDBiYzg0ZjU0YWJiMDA5ZDM5ZTMyODYxNWNhMGFmNGJjMWZkNjVkZDY0OWYwNDkxNjJmMmVmMWQ5ZjI3MDIyNDgzZA==; BDRCVFR[NUOtsRvVoHc]=mk3SLVN4HKm; BD_HOME=1; H_PS_PSSID=; sugstore=1; BA_HECTOR=ak85ag2h2h00a42hp81h1bpi70q
+  ```
+
+- HTTP的请求方式有7中，现在只知道GET和POST
+
+HTTP最常见的请求头如下：
+
+l     **Accept**：浏览器可接受的MIME类型；
+
+l     **Accept-Charset**：浏览器可接受的字符集；
+
+l     **Accept-Encoding**：浏览器能够进行解码的数据编码方式，比如gzip。Servlet能够向支持gzip的浏览器返回经gzip编码的HTML页面。许多情形下这可以减少5到10倍的下载时间；
+
+l     **Accept-Language**：浏览器所希望的语言种类，当服务器能够提供一种以上的语言版本时要用到；
+
+l     **Authorization**：授权信息，通常出现在对服务器发送的WWW-Authenticate头的应答中；
+
+l     **Connection**：表示是否需要持久连接。如果Servlet看到这里的值为“Keep-Alive”，或者看到请求使用的是HTTP 1.1（HTTP 1.1默认进行持久连接），它就可以利用持久连接的优点，当页面包含多个元素时（例如Applet，图片），显著地减少下载所需要的时间。要实现这一点，Servlet需要在应答中发送一个Content-Length头，最简单的实现方法是：先把内容写入ByteArrayOutputStream，然后在正式写出内容之前计算它的大小；
+
+l     **Content-Length**：表示请求消息正文的长度；
+
+l     **Cookie**：这是最重要的请求头信息之一；
+
+l     **From**：请求发送者的email地址，由一些特殊的Web客户程序使用，浏览器不会用到它；
+
+l     **Host**：初始URL中的主机和端口；
+
+l     **If-Modified-Since**：只有当所请求的内容在指定的日期之后又经过修改才返回它，否则返回304“Not Modified”应答；
+
+l     **Pragma**：指定“no-cache”值表示服务器必须返回一个刷新后的文档，即使它是代理服务器而且已经有了页面的本地拷贝；
+
+l     **Referer**：包含一个URL，用户从该URL代表的页面出发访问当前请求的页面。
+
+l     **User-Agent**：浏览器类型，如果Servlet返回的内容与浏览器类型有关则该值非常有用；
+
+l     **UA-Pixels****，UA-Color，UA-OS，UA-CPU**：由某些版本的IE浏览器所发送的非标准的请求头，表示屏幕大小、颜色深度、操作系统和CPU类型。
+
+#### 响应数据格式
+
+## Request请求+Response响应
+
+## JSP 相对过时
+
+## Cooki+Session 会话技术
+
+## Filter过滤器+Listerer监听器 
+
+## Ajax+Vue+ElementUI
+
+## 综合案例
 
 
 
