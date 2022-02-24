@@ -958,7 +958,7 @@ INSERT INTO tb_user VALUES
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <!-- CONSOLE : 表示档前的日志是可以输出到控制台的 -->
+    <!-- CONSOLE : 表示当前的日志是可以输出到控制台的 -->
     <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>[%level] %blue(%d{HH:mm:ss.SSS}) %cyan([%thread]) %boldGreen(%logger{15}) - %msg %n</pattern>
@@ -971,7 +971,7 @@ INSERT INTO tb_user VALUES
 </configuration>
 ```
 
-3. 编写MyBatis核心配置文件 -> 替换连接信息 解决硬编码问题
+3. 编写MyBatis核心配置文件 -> 替换连接信息 解决硬编码问题 mybatis-config.xml
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -992,12 +992,32 @@ INSERT INTO tb_user VALUES
     </environments>
     <mappers>
         <!-- 加载SQL的映射文件，等会来修改-->
-        <mapper resource="org/mybatis/example/BlogMapper.xml"/>
+        <mapper resource="UserMapper.xml"/>
     </mappers>
 </configuration>
 ```
 
+- 编写SQL映射文件 -> 统一管理SQL语句，解决硬编码问题 UserMapper.xml
 
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace 名称空间 -->
+<!--<mapper namespace="org.mybatis.example.BlogMapper">-->
+<mapper namespace="test">
+    <select id="selectAll" resultType="com.itheima.pojo.User"><!-- 返回结果的类型 -->
+        select * from tb_user;
+    </select>
+<!--    <insert id=""-->
+<!--    <update id=""-->
+<!--    <delete id=""-->
+</mapper>
+```
+
+为什么报错了呢😭😭😭😭😭😭
 
 
 

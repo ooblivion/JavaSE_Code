@@ -6,105 +6,6 @@
 
 
 
-
-
-## 基础语法
-
-### 注释
-
-### 字面量
-
-### 变量
-
-### 变量的使用注意事项
-
-- 定义时可以没有初始化值，但是使用的时候必须有初始化值
-- 变量声明后不能有存放其他类型的数据
-- 变量需要先声明再使用
-- `{...}`在作用域内不能定义两个同名变量
-
-### 变量在计算机种的底层原理
-
-- 变量存储是数据二进制形式
-- 数据变二进制的规则：2进1
-- 文字如何存储到计算机底层（ASCII码）
-  - 存储字符对应数字的二进制形式
-  - `'a' -> 97 -> 01100001`
-- 图片，视频等存储的都是二进制形式
-
-### 数据类型
-
-- 注意事项
-  - 整数默认int，相当于long类型后面加L/l
-  - 小数默认double，相当于float类型后面加F/f
-
-### 关键字，标志符
-
-### 类型转换
-
-- 什么是类型转换
-  - 类型范围小的，可以直接赋给类型范围大的变量
-    - byte -> short -> int -> long -> float ->double
-  - 类型范围大的转换为小的时候需要强制转换，而且会丢失精度
-  - 注意事项
-    - 强制类型转换可能造成数据丢失或溢出
-    - 浮点型转换为整型，直接丢掉小数部分，保留整数部分返回
-
-### 运算符
-
-#### 基本运算符
-
-#### +符号作连接符
-
-```java
-public class Demo {
-    public static void main(String[] args) {
-        int a = 5;
-        System.out.println("abc" + 'a');//abca
-        System.out.println("abc" + a);//abc5
-        System.out.println(5 + a);//10
-        System.out.println("abc" + 5 + 'a');//abc5a
-        System.out.println(15 + "abc" + 15);//15abc15
-        System.out.println(a+'a');//102
-        System.out.println(a+""+'a');//5a
-        System.out.println(a+'a'+"java");//102java
-        System.out.println("java"+a+'a');//java5a
-        System.out.println("java"+(a+'a'));//java102
-    }
-}
-```
-
-#### 自增自减运算符
-
-#### 赋值运算符
-
-#### 关系运算符
-
-#### 逻辑运算符
-
-#### 三元运算符
-
-#### 运算符优先级
-
-### 案例：键盘录入
-
-### 数组
-
-数组内存图
-
-Java内存分配
-
-- 栈：方法运行时所进入的内存
-- 堆：new出来的东西会在这片内存中开辟空间并产生地址
-- 方法区：字节码加载时进入的内存
-- 本地方法栈
-- 寄存器/程序计数器
-
-#### 常见使用问题
-
-- 超过最大索引， ArrayIndexOutOfBoundsException
-- 变量中没有存储数组地址而是null，NullPointerException
-
 ## 面向对象
 
 ### 封装
@@ -405,19 +306,13 @@ Objects的equals方法比较的结果是一样的，但是更安全（内部其�
 
 - `BigDeimal test = (10.0).divide(3.0, 2, )`
 
-
-
-
-
-
-
 ### 日期与时间
 
 ### JDK8新增日期类
 
 ### 包装类
 
-### 正则表达式
+- 
 
 ### Arrays类
 
@@ -460,170 +355,364 @@ Objects的equals方法比较的结果是一样的，但是更安全（内部其�
 
 #### Lambda表达式的省略规则
 
-## 集合Collection
-
-### basi
-
-### List
-
-#### ArrayList
-
-- 常用API
-  - get(int index)
-  - size()
-  - E remove(int index)
-  - boolean remove(Object o) 
-  - E set(int index, E element)
-
-#### LinkdeList
-
-### Set
-
-### 集合概述
-
-集合和数组都是容器
-
-- 数组定义完成并启动后，类型和长度都确定
-- 在增删数据操作时，数组不太合适，增删数据都需要放弃原有数组或移位
-
-- 数组适合的场景
-  - 业务数据的个数确定，并且都是同一种数据类型
-
-- 集合是Java中存储对象的一种容器
-
-- 集合的大小不固定，启动后可以动态变化，类型也可以选择不固定
-- 集合适合的场景
-  - 元素的增删操作
-- 注意：集合只能存储引用数据类型，如果要存储基本数据类型需要使用包装类
-
-
-
-#### 总结
-
-- 数组和集合储存元素的个数
-  - 数组定义后类型确定，大小固定
-  - 集合类型可以不固定，大小可变
-- 元素类型问题
-  - 数组可以存储基本类型和引用类型
-  - 集合只能存储引用类型
-- 适用场景
-  - 数组适合数据个数和类型都确定的场景
-  - 集合适合数据个数不去确定，而且频繁增删元素的场景（而且集合的功能更加丰富
-
-### 集合的体系特点
-
-- 集合
-  - Collection 单列 每个元素只包含一个值
-    - List 添加元素是有序的，可重复，有索引
-      - ⭐ArrayList
-      - LinkedList
-    - Set 添加元素无序，不重复，无索引
-      - HashSet 添加元素无序，不重复，无索引
-        - LinkedHashSet 有序，不重复，无索引
-      - TreeSet 按照大小默认升序排序，不重复，无索引
-  - Map 双列 每个元素包含两个值（键值对 key-value
-- 集合对于泛型的支持
-  - 集合都是支持泛型的，可以在编译阶段约束集合只能操作某种数据类型
-  - JDK1.7以后，后面的泛型类型申明可以省略
-- 注意
-  - 集合和泛型都只支持引用数据类型，不支持基本数据类型，所以集合中存储的元素都认为是对象
-  - 若要使用基本基本数据类型可以用包装类
-
-#### 其他问题
-
-- 
-
-### 集合常用API
-
-- add 
-- addAll
-- contain 
-- clear 
-- isEmpty 
-- remove 
-- size 
-- toArray
-
-### 集合的遍历方式
-
-#### 迭代器遍历概述
-
-- 遍历就是将容器中的所有元素全部访问呢一遍
-- 在Java中的迭代器是`Iterator`，迭代器是集合专用的遍历方式
-
-#### Collection集合获取迭代器
-
-- Collection
-  - `Iterator<E> iterator()` 默认指向集合的0索引
-- Iterator
-  - `boolean hasNext()`
-  - `E next()`
-  - `default void forEachRemaining(Consumer<? super E> action)`
-  - `default void remove()`
-
-一个while循环中只能有一个it.next
-
-### 集合储存自定义类型的对象
-
-### 常见的数据结构
-
-### List系列集合
-
-### 补充：集合的并发修改异常问题
-
-### 泛型深入
-
-### Set系列集合
-
-### Collection体系的特点，使用场景总结
-
-### 补充知识：可变参数
-
-### 不充知识：集合工具类Collections
-
-### Collection体系的案例综合
-
-## Map集合体系
-
-### 概述
-
-### 特点
-
-### 常用API
-
-- put(E e, E e)
-- remove 
-- clear
-- containKey
-- containValue
-- isEmpty
-- size
-- KeySet
-  - `Set<String> sets = maps.KeySet()` 多态
-- 获取全部值的集合 `Collection<V> value()`
-- 合并集合 putAll
-
-### 遍历 键值对
-
-### 遍历 键找值
-
-### 遍历 Lambda表达式
-
-### Map集合实现类之HashMap
-
-### Map集合实现类之LinkedHashMap
-
-### Map集合实现类之TreeMap
-
-### 补充知识：集合的嵌套
+### 
 
 
 
 ## IO流
 
+## 正则表达式
 
+### 入门案例
+
+- 校验QQ号码是否正确
+
+  ```java
+  public class RegQQDemo {
+      //校验QQ号码，必须全部数字6~20个
+      public static void main(String[] args) {
+          System.out.println(checkQQ("3255dwf332"));//false
+          System.out.println(checkQQ("325332432"));//true
+  
+          System.out.println("===");
+  
+          System.out.println(regCheckQQ("3255dwf332"));//false
+          System.out.println(regCheckQQ("325332432"));//true
+      }
+  
+      public static boolean regCheckQQ(String qq){
+          return qq != null && qq.matches("\\d{6,20}");
+      }
+  
+      public static boolean checkQQ(String qq){
+          //1. 判断qq号码的长度是否满足要求
+          if(qq == null || qq.length() < 6 || qq.length() >20){
+              return false;
+          }
+          //判断qq中是否全是数字，不是返回false
+          //3243215we12
+          for (int i = 0; i < qq.length(); i++) {
+              //获取每个字符
+              char ch = qq.charAt(i);
+              //判断这个字符是否不是数字，不是数字直接返回false
+              if(ch < '0' || ch > '9'){
+                  return false;
+              }
+          }
+          return true;
+      }
+  }
+  ```
+
+### 匹配规则
+
+- 字符类
+
+  - `[abc]`
+  - `[^abc]`
+  - `[a-zA-Z]`
+  - `[a-d[m-p]]` a-d或m-p
+  - `[a-z&&[def]]` 两个取交集，也就是def
+  - `[a-d&&[^bc]]` abcd排除bc，也就是ad
+  - `[a-d&&[^b-d]]` abcd排除bcd，也就是a
+
+- 预定义字符类
+
+  - `.` 任何字符
+  - `\d` 任何数字 `[0-9]`
+  - `\D` 非数字 `[^0-9]`
+  - `\s` 一个空白字符 `[\t\n\x0B\f\r]`
+  - `\S` 非空白字符 `[^\s]`
+  - `\w` 英文，数字，下划线 `[a-zA-Z_0-9]`
+  - `\W` 一个非单词字符 `[\W]` 
+
+- 量词
+
+  - `a?` 0/1
+  - `a*` >=0 
+  - `a+` >=1
+  - `a{n}` =n
+  - `a{n,}` >=n
+  - `a{n,m}` >n&&<m
+
+- 匹配正则表达式规则的API
+
+  - `public boolean matches(String regex)`
+
+- 匹配四位验证码案例
+
+  ```java
+  public static void main(String[] args) {
+      //四位数验证码
+      String s1 = "1ws2";
+      String s2 = "ss_1";
+      String regex1 = "[a-zA-Z0-9]{4}";
+      String regex2 = "[\\w && ^_]{4}";
+      String regex3 = "[\\w && [^_]]{4}";
+      System.out.println(s1.matches(regex1));//true
+      System.out.println(s1.matches(regex2));//false ? 有问题 在[]中排除必须用[]
+      System.out.println(s1.matches(regex3));//true
+      System.out.println("===");
+      System.out.println(s2.matches(regex1));//false
+      System.out.println(s2.matches(regex2));//false
+      System.out.println(s2.matches(regex3));//false
+  }
+  ```
+
+  
+
+### 常见案例
+
+- 模拟用户输入手机号码，验证格式正确并给出提示，直到正确为止
+
+  - 分析
+
+    - 定义方法用于接收用户输入数据，使用正则表达式完成检验，并给出提示
+
+  - 代码
+
+    ```java
+    public static void checkPhone(){
+        Scanner scanner = new Scanner(System.in);
+        while (true){
+            System.out.println("请输入手机号");
+            String phone = scanner.next();
+            //判断手机号是否正确
+            if(phone.matches("1[3-9]\\d{9}")){
+                System.out.println("手机号格式正确");
+                break;
+            }else {
+                System.out.println("手机号格式错误");
+            }
+        }
+    }
+    ```
+
+- 模拟匹配邮箱
+
+  - 代码
+
+    ```java
+    public static void checkEmail(){
+        Scanner scanner = new Scanner(System.in);
+        while (true){
+            System.out.println("请输入邮箱号码：");
+            String email = scanner.next();
+            //23432453@qq.com
+            //214324532@163.com
+            //4365243ds4325@pci.com.cn
+            if(email.matches("\\w{1,30}@[a-zA-Z0-9]{2,20}(\\.[a-zA-Z0-9]{2,20}){1,2}")){
+                System.out.println("邮箱格式正确");
+                break;
+            }else {
+                System.out.println("邮箱格式有误");
+            }
+        }
+    }
+    ```
+
+- 其他应用
+
+```
+1.验证用户名和密码：（"^[a-zA-Z]\w{5,15}$"）正确格式："(?!^\\d+$)(?!^[a-zA-Z]+$)(?!^[_#@]+$).{8,}"组成,并且第一个字必须为字母6~16位；
+2.验证电话号码：（"^(\d{3,4}-)\d{7,8}$"）正确格式：xxx/xxxx-xxxxxxx/xxxxxxxx；
+3.验证手机号码："^1[3|4|5|7|8][0-9]\\d{8}$"；
+4.验证身份证号（15位或18位数字）："\d{14}[[0-9],0-9xX]"；
+5.验证Email地址：("^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$")；   wwt2333@gmail.com
+6.只能输入由数字和26个英文字母组成的字符串：("^[A-Za-z0-9]+$")；
+7.整数或者小数：^[0-9]+([.][0-9]+){0,1}$
+8.只能输入数字："^[0-9]*$"。
+9.只能输入n位的数字："^\d{n}$"。
+10.只能输入至少n位的数字："^\d{n,}$"。
+11.只能输入m~n位的数字："^\d{m,n}$"。
+12.只能输入零和非零开头的数字："^(0|[1-9][0-9]*)$"。
+13.只能输入有两位小数的正实数："^[0-9]+(\.[0-9]{2})?$"。
+14.只能输入有1~3位小数的正实数："^[0-9]+(\.[0-9]{1,3})?$"。
+15.只能输入非零的正整数："^\+?[1-9][0-9]*$"。
+16.只能输入非零的负整数："^\-[1-9][0-9]*$"。
+17.只能输入长度为3的字符："^.{3}$"。
+18.只能输入由26个英文字母组成的字符串："^[A-Za-z]+$"。
+19.只能输入由26个大写英文字母组成的字符串："^[A-Z]+$"。
+20.只能输入由26个小写英文字母组成的字符串："^[a-z]+$"。
+21.验证是否含有^%&',;=?$\"等字符："[%&',;=?$\\^]+"。
+22.只能输入汉字："^[\u4e00-\u9fa5]{0,}$"。
+23.验证URL："^http://([\w-]+\.)+[\w-]+(/[\w-./?%&=]*)?$"。
+24.验证一年的12个月："^(0?[1-9]|1[0-2])$"正确格式为："01"～"09"和"10"～"12"。
+25.验证一个月的31天："^((0?[1-9])|((1|2)[0-9])|30|31)$"正确格式为；"01"～"09"、"10"～"29"和“30”~“31”。
+26.获取日期正则表达式：\\d{4}[年|\-|\.]\d{\1-\12}[月|\-|\.]\d{\1-\31}日?
+评注：可用来匹配大多数年月日信息。
+27.匹配双字节字符(包括汉字在内)：[^\x00-\xff]
+评注：可以用来计算字符串的长度（一个双字节字符长度计2，ASCII字符计1）
+28.匹配空白行的正则表达式：\n\s*\r
+评注：可以用来删除空白行
+29.匹配HTML标记的正则表达式：<(\S*?)[^>]*>.*?</>|<.*? />
+评注：网上流传的版本太糟糕，上面这个也仅仅能匹配部分，对于复杂的嵌套标记依旧无能为力
+30.匹配首尾空白字符的正则表达式：^\s*|\s*$
+评注：可以用来删除行首行尾的空白字符(包括空格、制表符、换页符等等)，非常有用的表达式
+31.匹配网址URL的正则表达式：[a-zA-z]+://[^\s]*
+评注：网上流传的版本功能很有限，上面这个基本可以满足需求
+32.匹配帐号是否合法(字母开头，允许5-16字节，允许字母数字下划线)：^[a-zA-Z][a-zA-Z0-9_]{4,15}$
+评注：表单验证时很实用
+33.匹配腾讯QQ号：[1-9][0-9]{4,}
+评注：腾讯QQ号从10 000 开始
+34.匹配中国邮政编码：[1-9]\\d{5}(?!\d)
+评注：中国邮政编码为6位数字
+35.匹配ip地址：([1-9]{1,3}\.){3}[1-9]。
+评注：提取ip地址时有用
+36.匹配MAC地址：([A-Fa-f0-9]{2}\:){5}[A-Fa-f0-9]
+Function IsRegu(Regu,s)
+'正则表达式校验
+If Regu="" Then
+Exit Function
+End if
+Dim Re,Sre
+Set Re = New RegExp
+Re.Pattern = Regu
+Sre = Re.Test(s)
+If Sre = True Then
+IsRegu = True
+Else
+IsRegu = False
+End If
+End Function
+tmp=" "
+if (IsRegu("\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*",tmp )) =false then
+msgbox "E-mail地址不合法 ！"
+FieldCheck#N=false
+不同的语言（如PHP和JAVA）、相同语言的不同类库（如来自Sun的Java Regular Expression类库跟Apache Jakarta的正则表达式类库）间，用法会有所差别，在使用的时候，要注意这些差别。
+验证URL
+functionIsValidUrl(str){
+varregu="^(https?://)"
++"?(([0-9a-z_!~*'().&=+$%-]+:)?[0-9a-z_!~*'().&=+$%-]+@)?"
++"(([0-9]{1,3}\.){3}[0-9]{1,3}"
++"|"
++"([0-9a-z_!~*'()-]+\.)*"
++"([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\."
++"[a-z]{2,6})"
++"(:[0-9]{1,4})?"
++"((/?)|"
++"(/[0-9a-z_!~*'().;?:@&=+$,%#-]+)+/?)$";
+varre=newRegExp(regu);
+if(!re.test(str)){
+return false;
+}
+return true;
+}
+
+```
+
+### 正则表达式在方法中的应用
+
+### 爬取信息/爬虫
+
+```java
+Pattern pattern = Pattern.compile(regex);//将字符串内容编译成匹配规则
+Matcher matcher = pattern.matcher(str);//通过匹配规则获取匹配器
+while(matcher.find){
+    System.out.println(matcher.group());
+}
+```
+
+
+
+
+
+正则表达式其他
+
+```java
+"^\\s*\\w+(?:\\.{0,1}[\\w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*\\.[a-zA-Z]+\\s*$"  
+  
+这个是一个企业级的程序里copy出来的。  
+合法E-mail地址：   
+1. 必须包含一个并且只有一个符号“@”   
+2. 第一个字符不得是“@”或者“.”   
+3. 不允许出现“@.”或者.@   
+4. 结尾不得是字符“@”或者“.”   
+5. 允许“@”前的字符中出现“＋”   
+6. 不允许“＋”在最前面，或者“＋@”   
+  
+正则表达式如下：   
+-----------------------------------------------------------------------   
+^(\w+((-\w+)|(\.\w+))*)\+\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$   
+-----------------------------------------------------------------------   
+  
+字符描述：   
+^ ：匹配输入的开始位置。   
+\：将下一个字符标记为特殊字符或字面值。   
+* ：匹配前一个字符零次或几次。   
++ ：匹配前一个字符一次或多次。   
+(pattern) 与模式匹配并记住匹配。   
+x|y：匹配 x 或 y。   
+[a-z] ：表示某个范围内的字符。与指定区间内的任何字符匹配。   
+\w ：与任何单词字符匹配，包括下划线。   
+$ ：匹配输入的结尾。  
+  
+参考资料：http://www.1-100.org/asp/2006/10273.htm  
+
+import java.util.regex.Matcher;  
+import java.util.regex.Pattern;  
+  
+/** 
+ * <p> 
+ * 
+ * <p>Copyright the original author or authors. 
+ * 
+ * @author Liu Huibin 
+ * @date Aug 27, 2010 
+ * @dateLastModified Aug 27, 2010 
+ */  
+public class Test {  
+public static void main(String[] args) {  
+  
+//电子邮件  
+ String check = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";  
+ Pattern regex = Pattern.compile(check);  
+ Matcher matcher = regex.matcher("dffdfdf@qq.com");  
+ boolean isMatched = matcher.matches();  
+ System.out.println(isMatched);  
+ /* 电话号码 
+ 
+String check = "^(13[4,5,6,7,8,9]|15[0,8,9,1,7]|188|187)\\d{8}$"; 
+ Pattern regex = Pattern.compile(check); 
+ Matcher matcher = regex.matcher("13555655606"); 
+ boolean isMatched = matcher.matches(); 
+ System.out.println(isMatched); 
+ 
+*/  
+}  
+}  
+如何在插入数据库后返回增加的唯一ID值 | encodeURIComponent编码后java后台的解码
+```
 
 ## 异常
+
+关于异常，对于RuntimeException异常和Exception要区分
+
+### 异常概述，分类，认识
+
+- 什么是异常
+  - 异常是程序在编译或者运行的过程中可能出现的问题，**语法错误不算异常**
+  - 比较典型的异常有：数组索引越界，空指针异常，日期格式化异常，类型转换异常，算数异常
+- 为什么要学习异常？
+  - 异常一旦出现了，如果没有处理，程序就会退出虚拟机而终止
+  - 研究异常并且避免异常错误，人后提前处理异常，体现程序的安全性和健壮性
+- 异常体系 Throwable
+  - **Error** 系统级别问题，JVM退出等，代码无法控制
+  - **Exception**：java.lang包下，称为异常类，它表示程序本身可以处理的异常
+    - **RuntimeException**：运行时异常，编译阶段不会报错
+      - 空指针异常 NullPointer 直接输出没问题，但是调用空指针的变量就会报错
+      - 数组索引越界异常 ArrayIndexOutOfBounds
+      - 数学操作异常 Arithematic
+      - 类型转换异常 ClassCast
+      - 数字转换异常 NumberFormat
+    - **除RuntimeException之外的所有异常**：编译异常，编译期必须处理，否则程序无法通过编译
+      - IO流中的异常
+      - 日期格式化异常
+- 编译时异常和运行时异常
+  - Java文件 .java
+  - -- Javac.exe -- 编译时异常，是在编译成class文件时必须要处理的异常，也称之为受检异常
+  - 字节码文件 .class
+  - -- Java.exe -- 运行时异常，在编译成class文件不需要处理，在运行字节码文件的时候可能出现的异常
 
 ### 自定义异常
 
@@ -640,56 +729,6 @@ Objects的equals方法比较的结果是一样的，但是更安全（内部其�
 
 
 ## 多线程
-
-
-
-## 网络编程
-
-- 网络通信的基本模式
-  - CS：客户端需要程序员开发，用户需要安装客户端。Server需要程序员开发实现
-  - DS：用户需要安装浏览器，Server需要程序员开发实现
-
-### 网络通信的三要素
-
-#### IP地址
-
-- 定义：设备在网络中的地址，是唯一标识
-
-#### IP地址操作类-InetAddress
-
-#### 端口号
-
-- 定义：应用程序在设备中的唯一标识
-
-#### 协议
-
-- 定义：数据在网络中传输的规则，常见的协议哟TCP/
-
-### UDP通信
-
-性能高一些
-
-#### UDP快速入门
-
-#### 广播&组播
-
-### TCP通信
-
-#### TP快速入门
-
-#### 多发多收集消息
-
-#### 同时接收多个客户端的消息
-
-#### 使用线程池进行优化
-
-### TCP通信模拟实战
-
-#### 即时通信
-
-#### 模拟BS系统
-
-以后的重心是学习Browser-Server的开发
 
 ## 单元测试
 
