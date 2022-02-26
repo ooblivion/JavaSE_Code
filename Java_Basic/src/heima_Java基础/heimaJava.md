@@ -16,6 +16,11 @@
 
 #### 常见面试题
 
+- String创建对象的两种方式有什么不同？
+  - 双引号给出的字符串对象存在于堆内存中的常量池，相同内容只会存储一份
+  - new字符串对象，每次都会在堆内存中产生一个新的对象
+- 
+
 #### String类常用API
 
 - length
@@ -307,6 +312,10 @@ Objects的equals方法比较的结果是一样的，但是更安全（内部其�
 - `BigDeimal test = (10.0).divide(3.0, 2, )`
 
 ### 日期与时间
+
+- Date
+- SimpleDateFormat
+- Calendar
 
 ### JDK8新增日期类
 

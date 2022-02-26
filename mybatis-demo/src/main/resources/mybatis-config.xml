@@ -3,12 +3,17 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+
+    <typeAliases>
+        <package name="com.itheima.pojo"/>
+    </typeAliases>
+
     <environments default="development">
         <environment id="development">
             <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
-                <property name="driver" value="com.mysql.jdbc.Driver"/>
-                <property name="url" value="jdbc:mysql://localhost:3306/mybatis?useSSL=false"/>
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/db_study?useSSL=false"/>
                 <property name="username" value="root"/>
                 <property name="password" value="wwtooblivion"/>
             </dataSource>
@@ -16,7 +21,8 @@
     </environments>
     <mappers>
         <!-- 加载SQL的映射文件，等会来修改 -->
-        <mapper resource="UserMapper.xml"/>
+<!--        <mapper resource="com/itheima/mapper/UserMapper.xml"/>-->
 <!--        <mapper resource="org/mybatis/example/BlogMapper.xml"/>-->
+        <package name="com.itheima.mapper"/>
     </mappers>
 </configuration>
