@@ -25,7 +25,20 @@ public class Client {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date begin = sdf.parse(beginTime);
         Date end = sdf.parse(endTime);
+        Date c1 = sdf.parse(client1);
+        Date c2 = sdf.parse(client2);
 
+        if (c1.after(begin) && c1.before(end)){
+            System.out.println("c1 success");
+        }else{
+            System.out.println("c1 fail");
+        }
+
+        if (c2.after(begin) && c2.before(end)){
+            System.out.println("c2 success");
+        }else {
+            System.out.println("c2 fail");
+        }
 
     }
 }
